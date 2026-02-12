@@ -5,15 +5,6 @@ import User from "@/models/User";
 // Create a client to send and receive events
 export const inngest = new Inngest({ id: "quickcart-next-v2" });
 
-export const helloWorld = inngest.createFunction(
-    { id: "hello-world" },
-    { event: "test/hello.world" },
-    async ({ event, step }) => {
-        await step.sleep("wait-a-moment", "1s");
-        return { message: `Hello ${event.data.email}!` };
-    },
-);
-
 // Inngest function to save user data to a database
 export const syncUserCreation = inngest.createFunction(
     { id: "sync-user-from-clerk" },

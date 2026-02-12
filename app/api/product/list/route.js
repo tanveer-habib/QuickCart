@@ -1,11 +1,12 @@
-"use server";
+import connectDB from "@/config/db";
+import Product from "@/models/Product";
 import { NextResponse as res } from "next/server";
-import connectDB from "@/config/db.js";
 
 export const GET = async (req) => {
     try {
         await connectDB();
-        return res.json({ success: true });
+        const products = await Product.find({});
+        return res.json({ success: true, products });
     } catch (error) {
         return res.json({ success: false, message: error.message });
     };

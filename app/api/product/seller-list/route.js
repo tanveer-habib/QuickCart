@@ -1,0 +1,21 @@
+import connectDB from "@/config/db";
+import authSeller from "@/lib/authSeller";
+import Product from "@/models/Product";
+import { getAuth } from "@clerk/nextjs/server";
+import { NextResponse as res } from "next/server";
+
+export const GET = async (req) => {
+    try {
+        const { userId } = getAuth(req);
+        const isSeller = await authSeller(userId);
+        if (!isSeller) {
+            return res.json({ success: false, message: "Not authorized" });
+        };
+
+        await connectDB();
+        const products = await Product.find({});
+        return res.json({ success: true, products });
+    } catch (error) {
+        return res.json({ success: false, message: error.message });
+    };
+};

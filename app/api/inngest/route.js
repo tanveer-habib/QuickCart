@@ -1,5 +1,5 @@
 import { serve } from "inngest/next";
-import { helloWorld, inngest, syncUserCreation, syncUserDeletion, syncUserUpdation } from "@/config/inngest.js";
+import { inngest, syncUserCreation, syncUserDeletion, syncUserUpdation } from "@/config/inngest.js";
 
 console.log("Inngest Root fuction file hitted");
 export const { GET, POST, PUT } = serve({
@@ -8,6 +8,5 @@ export const { GET, POST, PUT } = serve({
         syncUserCreation,
         syncUserUpdation,
         syncUserDeletion,
-        helloWorld
     ],
 });
