@@ -1,3 +1,4 @@
+import { inngest } from "@/config/inngest.js";
 import Product from "@/models/Product";
 import User from "@/models/User";
 import { getAuth } from "@clerk/nextjs/server";
@@ -5,7 +6,7 @@ import { NextResponse as res } from "next/server";
 
 export const POST = async (req) => {
     try {
-        const { userId } = getAuth();
+        const { userId } = getAuth(req);
         const { address, items } = await req.json();
         if (!address || items.length === 0) {
             return res.json({ success: false, message: "Invalid data" });
@@ -13,7 +14,7 @@ export const POST = async (req) => {
 
         const amount = await items.reduce(async (acc, item) => {
             const product = await Product.findById(item.product);
-            return acc + product.offerPrice * item.quantity;
+            return await acc + product.offerPrice * item.quantity;
         }, 0);
 
         await inngest.send({
@@ -27,6 +28,7 @@ export const POST = async (req) => {
         await user.save();
         return res.json({ success: true, message: "Order Placed" });
     } catch (error) {
+        console.log("Got this error : ", error.message)
         return res.json({ success: false, message: error.message });
     };
 };
