@@ -1,22 +1,17 @@
 import { NextResponse as res } from "next/server";
-import connectDB from "@/config/db.js";
 import Address from "@/models/Address.js";
-import Product from "@/models/Product.js";
 import Order from "@/models/Order.js";
+import connectDB from "@/config/db";
 import { getAuth } from "@clerk/nextjs/server";
-import authSeller from "@/lib/authSeller";
+import Product from "@/models/Product";
 
 export const GET = async (req) => {
     try {
         const { userId } = getAuth(req);
-        const isSeller = await authSeller(userId);
-        if (!isSeller) {
-            return res.json({ success: false, message: "Not authorized" });
-        };
         await connectDB();
         Address.length;
         Product.length;
-        const orders = await Order.find({}).populate("address items.product");
+        const orders = await Order.find({ userId }).populate("address items.product");
         return res.json({ success: true, orders });
     } catch (error) {
         return res.json({ success: false, message: error.message });

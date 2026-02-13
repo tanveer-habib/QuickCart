@@ -19,7 +19,7 @@ export const POST = async (req) => {
 
         await inngest.send({
             name: "order/created",
-            data: { userId, address, items, amount: amount + Math.floor(amount * 0.02) },
+            data: { userId, address, items, amount: amount + Math.floor(amount * 0.02), date: Date.now() },
             date: Date.now(),
         });
 
